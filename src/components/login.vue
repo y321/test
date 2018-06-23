@@ -21,12 +21,17 @@
                 this.$refs.loginForm.validate((valid)=>{
                     if(valid){
                         if(this.user.name ==='admin' &&this.user.pass==='123'){
-                            this.$notify({
+                            // dispatch采用Promise链式调用  通过dispatch方法来调用actions中的login方法
+                            this.$store.dispatch('login', this.user).then(() => {
+                                this.$notify({
                                 type:'success',
                                 message:'欢迎你，'+this.user.name+'！',
                                 duration:3000
                             })
                             this.$router.replace('/')
+
+                            })
+                            
                         }else{
                             this.$message({
                                 type:'error',
