@@ -20,8 +20,9 @@
             login () {
                 this.$refs.loginForm.validate((valid)=>{
                     if(valid){
-                        if(this.user.name ==='admin' &&this.user.pass==='123'){
-                            // dispatch采用Promise链式调用  通过dispatch方法来调用actions中的login方法
+                        this.$ajax.post('/users/validate',this.user).then((res)=>{
+                            if(res.data){
+                                // dispatch采用Promise链式调用  通过dispatch方法来调用actions中的login方法
                             this.$store.dispatch('login', this.user).then(() => {
                                 this.$notify({
                                 type:'success',
@@ -29,16 +30,24 @@
                                 duration:3000
                             })
                             this.$router.replace('/')
-
                             })
-                            
-                        }else{
+                            }else{
                             this.$message({
                                 type:'error',
                                 message:'用户名或密码错误',
                                 showClose:true
                             })
                         }
+
+                     }).catch((err) => {
+                            this.$message({
+                            type: 'error',
+                            message: '网络错误，请重试',
+                            showClose: true
+                        })
+
+                     } )      
+                       
                         
                     }else{
                         return false

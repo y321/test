@@ -1,10 +1,18 @@
 var express = require('express')
 var app = new express()
-var router = require('../router/user')
+var router = require('./route/user')
 
 bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false}))
+
+//http请求头部允许跨域
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    next();
+});
 
 app.use('/users', router) // 将路由注册到/users的路径下
 

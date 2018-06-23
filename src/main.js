@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'//引入路由
 import  './element'
 import store from './vuex'
-import './axios'
+import './axious'
 
 Vue.config.productionTip = false
 
