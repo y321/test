@@ -2,7 +2,7 @@
   <el-container>
     <el-header class="header" height="60px">
       <el-row :gutter="20">
-        <el-col :span="6"><h3>我的网站</h3></el-col>
+        <el-col :span="6"><h3>MyTodo</h3></el-col>
         <el-col :span="6" :offset="12">
           <span v-if="user"> {{user.name}}
             <el-button class="login" type="warning" plain  @click="logout">注销</el-button>
@@ -15,11 +15,14 @@
       <router-view/>
       <!-- <data-table></data-table> -->
     </el-main>
+    <Footer></Footer>
   </el-container>
 </template>
 
 <script>
 import DataTable from './components/DataTable'
+import Footer from './components/footer'
+
 export default {
 
 
@@ -40,8 +43,9 @@ export default {
             }
         },
         components: {
-    DataTable
-  }
+        DataTable,
+        Footer
+        }
 }
 </script>
 

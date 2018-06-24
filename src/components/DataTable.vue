@@ -38,8 +38,15 @@
             </el-table-column>
             <el-table-column label="计划状态" sortable="custom">
                 <template slot-scope="scope">
-                 <el-tag :type="statusColors[scope.row.status]">{{statuses[scope.row.status]}}</el-tag>
+                    <el-select v-model="scope.row.status" @change="editType(scope.row)" >
+                    <el-option v-for="status, index in statuses" :key="status" :label="status" :value="index"></el-option>
+                    </el-select>                 
                 </template>
+                <!-- <template slot-scope="scope">
+                    <el-select v-model="scope.row.status" @change="updateStatusAjax(scope.row, index)" >
+                    <el-option v-for="status, index in statuses" :key="status" :label="status" :value="index"></el-option>
+                    </el-select>                 
+                </template> -->
             </el-table-column>
             <el-table-column label="开始时间" sortable="custom">
                 <template slot-scope="scope">
@@ -53,8 +60,8 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                <el-button size="small" type="warning" circle  icon="el-icon-edit"></el-button>
-                <el-button size="small" type="danger" circle icon="el-icon-delete"></el-button>
+                <el-button size="small" type="warning" circle  icon="el-icon-edit" @click="editTodo(scope.row)"></el-button>
+                <el-button size="small" type="danger" circle icon="el-icon-delete" @click="removeTodoAjax(scope.row)"></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -169,9 +176,49 @@ export default{
                 message: err
              }))
         },
+        // 修改
         editAjax() {
-            this.closeEditDialog()
-        }
+            this.$ajax.put('todos/' + this.currentTodo._id, this.currentTodo).then((res) => {
+                if (res.data) {
+                    var index = this.data.findIndex(item => item._id == res.data._id)
+                    this.data.splice(index, 1, res.data)
+                }
+                this.closeEditDialog()
+            }).catch((err) => this.$notify({
+                type: 'error',
+                message: err
+            }))
+        },
+        
+        editTodo(row) {
+            this.currentTodo = JSON.parse(JSON.stringify(row))
+            this.editShow = true
+        },
+        // updateStatusAjax(row, status) {
+        //     var todo = { _id: row._id, status }
+        //     this.$ajax.put('todos/' + todo._id, todo).then((res) => {
+        //         if (res.data) {
+        //             var index = this.data.findIndex(item => item._id == res.data._id)
+        //             this.data.splice(index, 1, res.data)
+        //         }
+        //     }).catch((err) => this.$notify({
+        //         type: 'error',
+        //         message: err
+        //     }))
+        // },
+        removeTodoAjax(row) {
+                this.$confirm('确定要删除?').then(() => {
+                    this.$ajax.delete('todos/' + row._id).then((res) => {
+                        if (res.data) {
+                            var index = this.data.findIndex(item => item._id == res.data._id)
+                            this.data.splice(index, 1)
+                        }
+                    })
+                }).catch((err) => this.$notify({
+                    type: 'error',
+                    message: err
+                }))
+            },
     },
     //负责过滤
     computed: {
