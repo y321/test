@@ -65,9 +65,28 @@
          layout="total, sizes, prev, pager, next, jumper"
          @size-change="pageSizeChange" @current-change="pageChange">
         </el-pagination>
-        <!-- 编辑弹框 -->
-        <edit-dialog :show="editShow" title="编辑计划" @close="closeEditDialog" @save="saveTodo"></edit-dialog>
-        
+        <!-- 对话框 -->
+        <edit-dialog :show="editShow" title="编辑计划" @close="closeEditDialog" @save="saveTodo">
+            <el-form :model="currentTodo" ref="todoEditForm">
+                <el-form-item label="标题" prop="name" required>
+                    <el-input v-model="currentTodo.name"></el-input>
+                </el-form-item>
+                <el-form-item label="地点" prop="place" required>
+                    <el-input v-model="currentTodo.place"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remarks" required>
+                    <el-input v-model="currentTodo.remarks" type="textarea"></el-input>
+                </el-form-item>
+                <el-row>
+                    <el-form-item label="开始时间" prop="starttime" required>
+                        <el-date-picker v-model="currentTodo.starttime" type="date"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="结束时间" prop="endtime" required>
+                        <el-date-picker v-model="currentTodo.endtime" type="date"></el-date-picker>
+                    </el-form-item>
+                </el-row>
+                
+        </el-form>
 </edit-dialog>
     </view-page>
 </template>
@@ -94,7 +113,8 @@ export default{
             // 分页
             currentPage: 1,
             currentPageSize: 3,
-            editShow: false
+            editShow: false,
+            currentTodo: {}
         }
     },
     mounted() {
@@ -125,13 +145,27 @@ export default{
         },
         //弹框
         addTodo() {
+            this.currentTodo = {}//
             this.editShow = true
         },
         saveTodo() {
-            this.closeEditDialog()
+            // 保存内容，根据currentTodo._id判断是新增的还是修改的
+            this.$refs.todoEditForm.validate((valid) => {
+            if (valid) {
+                this.currentTodo._id ? this.editAjax() : this.addAjax()
+            }
+        });
         },
         closeEditDialog() {
+            this.currentTodo = {}
+            this.$refs.todoEditForm.resetFields()
             this.editShow = false
+        },
+        addAjax() {
+            this.closeEditDialog()
+        },
+        editAjax() {
+            this.closeEditDialog()
         }
     },
     //负责过滤
