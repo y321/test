@@ -2,7 +2,8 @@
     <view-page>
         <!-- 左按钮区 -->
         <template slot="left-field">
-            <el-button type="danger" icon="el-icon-circle-plus-outline" @click="addTodo">添加</el-button>
+            <el-button type="danger" icon="el-icon-plus" circle @click="addTodo"></el-button>
+            <el-button  icon="el-icon-refresh" circle></el-button>
         </template>
         <!-- 搜索框 -->
         <template slot="search-field">
@@ -18,9 +19,7 @@
         </template>
         <!-- 右按钮区 -->
         <template slot="right-field">
-            <el-button type="primary" icon="el-icon-refresh">刷新</el-button>
-            <el-button type="warning" icon="el-icon-upload2">导入</el-button>
-            <el-button type="success" icon="el-icon-download">导出</el-button>
+            <el-button  icon="el-icon-search" circle></el-button>
         </template>
         <!-- 表格区 -->
         <el-table :data="pagedData" @sort-change="sortChange">
@@ -54,8 +53,8 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                <el-button size="small" type="warning" icon="el-icon-edit"></el-button>
-                <el-button size="small" type="danger" icon="el-icon-delete"></el-button>
+                <el-button size="small" type="warning" circle  icon="el-icon-edit"></el-button>
+                <el-button size="small" type="danger" circle icon="el-icon-delete"></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -71,17 +70,17 @@
                 <el-form-item label="标题" prop="name" required>
                     <el-input v-model="currentTodo.name"></el-input>
                 </el-form-item>
-                <el-form-item label="地点" prop="place" required>
+                <el-form-item label="地点" prop="place" >
                     <el-input v-model="currentTodo.place"></el-input>
                 </el-form-item>
-                <el-form-item label="备注" prop="remarks" required>
+                <el-form-item label="备注" prop="remarks" >
                     <el-input v-model="currentTodo.remarks" type="textarea"></el-input>
                 </el-form-item>
                 <el-row>
-                    <el-form-item label="开始时间" prop="starttime" required>
+                    <el-form-item label="开始时间" prop="starttime" >
                         <el-date-picker v-model="currentTodo.starttime" type="date"></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="结束时间" prop="endtime" required>
+                    <el-form-item label="结束时间" prop="endtime" >
                         <el-date-picker v-model="currentTodo.endtime" type="date"></el-date-picker>
                     </el-form-item>
                 </el-row>
@@ -162,7 +161,13 @@ export default{
             this.editShow = false
         },
         addAjax() {
-            this.closeEditDialog()
+            this.$ajax.post('todos', this.currentTodo).then((res) => {
+                if (res.data) this.data.push(res.data)
+                this.closeEditDialog()
+            }).catch((err) => this.$notify({
+                type: 'error',
+                message: err
+             }))
         },
         editAjax() {
             this.closeEditDialog()

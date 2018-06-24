@@ -5,9 +5,9 @@
         <el-col :span="6"><h3>我的网站</h3></el-col>
         <el-col :span="6" :offset="12">
           <span v-if="user"> {{user.name}}
-            <el-button class="login" type="warning"  @click="logout">注销</el-button>
+            <el-button class="login" type="warning" plain  @click="logout">注销</el-button>
         </span>
-          <el-button class="login" v-else type="success" @click="login">登录</el-button>        
+          <el-button class="login" v-else type="success" plain @click="login">登录</el-button>        
         </el-col>
       </el-row>
     </el-header>

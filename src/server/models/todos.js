@@ -6,5 +6,5 @@ module.exports = mongoose.model('Todos', new mongoose.Schema({
     remarks: String,
     status: Number,
     starttime:Date,
-    endtime: Date,
+    endtime: Date
 }))
