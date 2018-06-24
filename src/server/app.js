@@ -15,6 +15,7 @@ app.all('*', function(req, res, next) {
 });
 
 app.use('/users', router) // 将路由注册到/users的路径下
+app.use('/todos', require('./route/router'))
 
 var url = "mongodb://localhost:27017/test"
 var mongoose = require('mongoose')

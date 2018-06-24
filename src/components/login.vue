@@ -29,7 +29,7 @@
                                 message:'欢迎你，'+this.user.name+'！',
                                 duration:3000
                             })
-                            this.$router.replace('/')
+                            this.$router.replace('/datatable')
                             })
                             }else{
                             this.$message({
