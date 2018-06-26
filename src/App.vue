@@ -4,6 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="6"><h3>MyTodo</h3></el-col>
         <el-col :span="6" :offset="12">
+          <el-button class="reg"  type="success" plain @click="reg">注册</el-button>
           <span v-if="user"> {{user.name}}
             <el-button class="login" type="warning" plain  @click="logout">注销</el-button>
         </span>
@@ -30,6 +31,9 @@ export default {
   methods: {
             login () {
                 this.$router.replace('/login')
+            },
+            reg () {
+                this.$router.replace('/reg')
             },
             logout(){
                 this.$store.dispatch('logout').then(()=>{

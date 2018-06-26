@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Main from '@/components/Main.vue'
 import Login from '@/components/Login.vue'
 import DataTable from '@/components/DataTable'
+import Reg from '@/components/Reg'
 
 Vue.use(Router) // 注册vue-router
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/datatable',
       name: 'DataTable',
       component: DataTable
+    },
+    {
+      path: '/reg',
+      name: 'Reg',
+      component: Reg
     },
   ]
 })
